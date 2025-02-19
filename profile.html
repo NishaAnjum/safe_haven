@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="logo-container">
+        <img src="logofinal.png" alt="Safe Route Logo" class="logo">
+    </div>
+
+    <nav class="navbar">
+        <a href="welcome.html">Dashboard</a>
+        <a href="complaints.html">Complaints</a>
+        <a href="experiances.html">Experiences</a>
+        <a href="media.html">Media</a>
+        <a href="forum.html">Forum</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <button onclick="logout()">Logout</button>
+    </nav>
+
+    <h1>Profile: <span id="username"></span></h1>
+
+    <section class="profile-info">
+        <div class="profile-actions">
+            <button onclick="updateProfile()">Update Profile</button>
+        </div>
+    </section>
+
+    <script src="profile.js"></script>
+
+    <script>
+        // Get the current user from localStorage
+        const currentUser = localStorage.getItem('currentUser');
+        const savedUsername = localStorage.getItem(`${currentUser}_username`) || ''; // Retrieve saved username
+
+        // Display saved username in the profile
+        document.getElementById('username').textContent = savedUsername;
+
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        // Function to update profile (redirect to edit profile page)
+        function updateProfile() {
+            window.location.href = 'edit-profile.html';  // Redirect to profile edit page
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="logo-container">
+        <img src="logofinal.png" alt="Safe Route Logo" class="logo">
+    </div>
+
+    <nav class="navbar">
+        <a href="welcome.html">Dashboard</a>
+        <a href="complaints.html">Complaints</a>
+        <a href="experiances.html">Experiences</a>
+        <a href="media.html">Media</a>
+        <a href="forum.html">Forum</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <button onclick="logout()">Logout</button>
+    </nav>
+
+    <h1>Edit Profile</h1>
+
+    <section class="edit-profile-form">
+        <div class="edit-section">
+            <p><strong>Username:</strong></p>
+            <input type="text" id="usernameInput" placeholder="Enter your username">
+        </div>
+
+        <div class="edit-actions">
+            <button type="button" onclick="saveProfile()">Save Changes</button> <!-- Make sure the button calls saveProfile -->
+            <button onclick="cancelEdit()">Cancel</button>
+        </div>
+    </section>
+
+    <script src="profile.js"></script>
+
+    <script>
+        // Get the current user from localStorage
+        const currentUser = localStorage.getItem('currentUser');
+
+        // Get the saved username from localStorage
+        const savedUsername = localStorage.getItem(`${currentUser}_username`) || '';
+
+        // Pre-fill the username input with the saved username
+        document.getElementById('usernameInput').value = savedUsername;
+
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        // Save changes and update the username in localStorage
+        function saveProfile() {
+            const username = document.getElementById('usernameInput').value;
+
+            if (username) {
+                // Save the updated username to localStorage
+                localStorage.setItem(`${currentUser}_username`, username);
+
+                // Also update the global currentUser value
+                localStorage.setItem('currentUser', username);
+
+                alert('Profile updated successfully!');
+                window.location.href = 'profile.html';  // Redirect back to the profile page
+            } else {
+                alert('Please fill in a valid username!');
+            }
+        }
+
+        // Cancel editing and return to profile page
+        function cancelEdit() {
+            window.location.href = 'profile.html';  // Redirect back to the profile page
+        }
+    </script>
+
+</body>
+
+</html>

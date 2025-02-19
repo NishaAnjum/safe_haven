@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHaven - Chat</title>
+    <style>
+        /* Style for chatbox */
+        .chatbox-container {
+            width: 300px;
+            height: 400px;
+            background-color: #f4f4f4;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            display: none;
+        }
+        .chatbox-header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .chatbox-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+        .chatbox-input {
+            display: flex;
+            border-top: 1px solid #ccc;
+        }
+        .chatbox-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+        .chatbox-input button {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Chatbox -->
+    <div id="chatbox" class="chatbox-container">
+        <div class="chatbox-header">Chat</div>
+        <div class="chatbox-messages" id="chatMessages"></div>
+        <div class="chatbox-input">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Chatbox for Group Discussion -->
+    <div id="groupChatbox" class="chatbox-container">
+        <div class="chatbox-header">Group Discussion</div>
+        <div class="chatbox-messages" id="groupChatMessages"></div>
+        <div class="chatbox-input">
+            <input type="text" id="groupChatInput" placeholder="Type your message...">
+            <button onclick="sendGroupMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Script to handle chatbox functionalities -->
+    <script>
+        // Toggle the chatbox visibility
+        function toggleChatbox() {
+            const chatbox = document.getElementById('chatbox');
+            chatbox.style.display = chatbox.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        // Toggle the group chat visibility
+        function toggleGroupChatbox() {
+            const groupChatbox = document.getElementById('groupChatbox');
+            groupChatbox.style.display = groupChatbox.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        // Send a personal message
+        function sendMessage() {
+            const message = document.getElementById('chatInput').value;
+            const messagesContainer = document.getElementById('chatMessages');
+
+            if (message) {
+                // Display message
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = message;
+                messagesContainer.appendChild(messageDiv);
+
+                // Save message in local storage (for persistence)
+                const storedMessages = JSON.parse(localStorage.getItem('userMessages') || '[]');
+                storedMessages.push(message);
+                localStorage.setItem('userMessages', JSON.stringify(storedMessages));
+
+                // Clear input
+                document.getElementById('chatInput').value = '';
+            }
+        }
+
+        // Send a message in the group chat
+        function sendGroupMessage() {
+            const message = document.getElementById('groupChatInput').value;
+            const messagesContainer = document.getElementById('groupChatMessages');
+
+            if (message) {
+                // Display message
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = message;
+                messagesContainer.appendChild(messageDiv);
+
+                // Save message in local storage (for persistence)
+                const storedGroupMessages = JSON.parse(localStorage.getItem('groupMessages') || '[]');
+                storedGroupMessages.push(message);
+                localStorage.setItem('groupMessages', JSON.stringify(storedGroupMessages));
+
+                // Clear input
+                document.getElementById('groupChatInput').value = '';
+            }
+        }
+
+        // Load saved messages for personal and group chats
+        function loadSavedMessages() {
+            const userMessages = JSON.parse(localStorage.getItem('userMessages') || '[]');
+            const groupMessages = JSON.parse(localStorage.getItem('groupMessages') || '[]');
+
+            const userMessagesContainer = document.getElementById('chatMessages');
+            const groupMessagesContainer = document.getElementById('groupChatMessages');
+
+            // Load personal messages
+            userMessages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = msg;
+                userMessagesContainer.appendChild(messageDiv);
+            });
+
+            // Load group messages
+            groupMessages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = msg;
+                groupMessagesContainer.appendChild(messageDiv);
+            });
+        }
+
+        // Initialize chat on page load
+        window.onload = () => {
+            loadSavedMessages();
+        }
+    </script>
+
+    <button onclick="toggleChatbox()">Toggle Personal Chat</button>
+    <button onclick="toggleGroupChatbox()">Toggle Group Chat</button>
+</body>
+</html>

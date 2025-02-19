@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Forum</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .forum-sections {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .complaints-section, .experiences-section {
+            width: 48%;
+        }
+
+        .complaints-section {
+            padding-right: 20px;
+            border-right: 3px solid #888; /* Darker separator */
+        }
+
+        .experiences-section {
+            padding-left: 20px;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .entry {
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        /* Different background colors for complaints and experiences */
+        .complaints-section .entry {
+            background: #ffe6e6; /* Light pink */
+        }
+
+        .experiences-section .entry {
+            background: #e6f7ff; /* Light blue */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Discussion Forum</h2>
+        <input type="text" id="searchBox" placeholder="Search complaints and experiences..." onkeyup="searchForum()">
+        
+        <div class="forum-sections">
+            <div class="complaints-section">
+                <h3>Complaints</h3>
+                <div id="complaintsList"></div>
+            </div>
+            <div class="experiences-section">
+                <h3>Experiences</h3>
+                <div id="experiencesList"></div>
+            </div>
+        </div>
+        
+        <button onclick="location.href='welcome.html'">Back</button>
+    </div>
+
+    <script>
+        function loadForum() {
+            const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+            const experiences = JSON.parse(localStorage.getItem('experiences')) || [];
+
+            displayComplaints(complaints);
+            displayExperiences(experiences);
+        }
+
+        function displayComplaints(complaints) {
+            const complaintsList = document.getElementById('complaintsList');
+            complaintsList.innerHTML = complaints.length 
+                ? complaints.map(item => 
+                    `<div class="entry">
+                        <strong>${item.user}</strong>: ${item.title}
+                        <p>${item.message}</p>
+                        <button onclick="connect('${item.user}')">Request to Connect</button>
+                    </div>`).join('') 
+                : '<p>No complaints yet.</p>';
+        }
+
+        function displayExperiences(experiences) {
+            const experiencesList = document.getElementById('experiencesList');
+            experiencesList.innerHTML = experiences.length 
+                ? experiences.map(item => 
+                    `<div class="entry">
+                        <strong>${item.user}</strong>: ${item.title}
+                        <p>${item.message}</p>
+                        <button onclick="connect('${item.user}')">Request to Connect</button>
+                    </div>`).join('') 
+                : '<p>No experiences shared yet.</p>';
+        }
+
+        function searchForum() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+            const experiences = JSON.parse(localStorage.getItem('experiences')) || [];
+
+            const filteredComplaints = complaints.filter(({ title, message }) =>
+                title.toLowerCase().includes(query) || message.toLowerCase().includes(query)
+            );
+
+            const filteredExperiences = experiences.filter(({ title, message }) =>
+                title.toLowerCase().includes(query) || message.toLowerCase().includes(query)
+            );
+
+            displayComplaints(filteredComplaints);
+            displayExperiences(filteredExperiences);
+        }
+
+        function connect(user) {
+            alert(`Request sent to: ${user}`);
+        }
+
+        document.addEventListener("DOMContentLoaded", loadForum);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,225 @@
+/* Importing Poppins Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #D2B095;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: #9C4F46; /* Deep Brick Red for Primary Text */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Main Container */
+.container {
+    width: 80%;
+    max-width: 900px;
+    margin: 40px auto;
+    background: #FFFFFF; /* Clean White */
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Styling */
+.logo-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.logo {
+    max-width: 250px;
+    height: auto;
+}
+
+/* Navigation Menu */
+nav, .navbar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    background-color: #B67860; /* Soft Brown */
+    padding: 15px 40px;
+    border-radius: 12px;
+}
+
+nav a, .navbar a {
+    color: #F5ECE7; /* Light Cream */
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    font-size: 18px;
+}
+
+nav a:hover, .navbar a:hover {
+    color: #D9B8A6; /* Warm Beige Hover Effect */
+    text-decoration: underline;
+}
+
+/* Headings */
+h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: #9C4F46; /* Deep Brick Red */
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 36px;
+    color: #B67860; /* Soft Brown */
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+/* Paragraph Styling */
+p {
+    text-align: justify;
+    color: #9C4F46;
+    font-size: 20px;
+    line-height: 1.9;
+    margin-bottom: 25px;
+}
+
+/* Form Input Styling */
+input[type="text"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 14px;
+    margin: 12px 0;
+    border: 2px solid #B67860; /* Soft Brown Border */
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: #9C4F46;
+    font-size: 18px;
+}
+
+/* Button Styling */
+button {
+    background-color: #9C4F46; /* Deep Brick Red */
+    color: white;
+    padding: 14px 28px;
+    margin: 20px 0;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #B67860; /* Soft Brown Hover */
+    transform: scale(1.08);
+}
+
+button:disabled {
+    background: #D9B8A6; /* Muted Warm Beige for Disabled */
+    cursor: not-allowed;
+}
+
+/* Media Section */
+#cameraPreview {
+    width: 60%;
+    max-width: 600px;
+    height: auto;
+    border: 2px solid #B67860;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+#mediaList video {
+    width: 60%;
+    max-width: 600px;
+    height: auto;
+    margin-top: 10px;
+}
+
+/* Entry Sections */
+.entry {
+    background: #F5ECE7; /* Light Cream */
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 30px;
+    }
+
+    nav, .navbar {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    #cameraPreview, #mediaList video {
+        width: 90%;
+    }
+}
+
+/* Additional Flex Utilities */
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* SOS Button */
+.sos-button {
+    background-color: #B67860; /* Soft Brown */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20px;
+    margin-top: -20px;
+    position: relative; 
+    top: -20px;
+}
+
+.sos-button:hover {
+    background-color: #9C4F46; /* Deep Brick Red Hover */
+}

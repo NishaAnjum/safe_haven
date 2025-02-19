@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Experience Forum</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Share Your Experience</h2>
+    <form id="experienceForm">
+        <label>Title:</label>
+        <input type="text" id="experienceTitle" required>
+
+        <label>Message:</label>
+        <textarea id="experienceMessage" required></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const experienceForm = document.getElementById('experienceForm');
+        experienceForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const currentUser = localStorage.getItem('currentUser');
+            const title = document.getElementById('experienceTitle').value;
+            const message = document.getElementById('experienceMessage').value;
+
+            const experience = { user: currentUser, title, message };
+            const experiences = JSON.parse(localStorage.getItem('experiences')) || [];
+            experiences.push(experience);
+            localStorage.setItem('experiences', JSON.stringify(experiences));
+
+            alert('Experience shared successfully!');
+            window.location.reload();
+        });
+    </script>
+</body>
+
+</html>

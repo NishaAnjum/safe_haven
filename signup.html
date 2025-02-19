@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="form-container">
+        <h2>Create an Account</h2>
+        <form id="signupForm">
+            <label>Username:</label>
+            <div class="username-container">
+                <input type="text" id="signupUsername" required>
+                <button type="button" id="generateUsername">Generate Username</button>
+            </div>
+
+            <label>Password:</label>
+            <input type="password" id="signupPassword" required>
+
+            <label>Confirm Password:</label>
+            <input type="password" id="confirmPassword" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <p id="signupError"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

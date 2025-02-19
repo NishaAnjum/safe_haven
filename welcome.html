@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Chatbox styles */
+        .chatbox-container {
+            width: 300px;
+            height: 400px;
+            background-color: #f4f4f4;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* Start hidden */
+        }
+        .chatbox-header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .chatbox-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+        .chatbox-input {
+            display: flex;
+            border-top: 1px solid #ccc;
+        }
+        .chatbox-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+        .chatbox-input button {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo-container">
+        <img src="logofinal.png" alt="Safe Route Logo" class="logo">
+    </div>
+    <button id="sosButton">SOS</button>
+    <nav class="navbar">
+        <a href="welcome.html">Dashboard</a>
+        <a href="complaints.html">Complaints</a>
+        <a href="experiances.html">Experiences</a>
+        <a href="media.html">Media</a>
+        <a href="forum.html">Forum</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="profile.html">Profile</a>
+        <button onclick="logout()">Logout</button>
+    </nav>
+    
+    <h1>Welcome! <span id="userDisplay"></span>!</h1>
+    <h2>Chat Requests</h2>
+    <div id="chatRequests"></div>
+
+    <!-- Button to toggle chatbox visibility -->
+    <button onclick="toggleChatbox()">Open Chatbox</button>
+
+    <!-- Chatbox for Personal DM -->
+    <div id="chatbox" class="chatbox-container">
+        <div class="chatbox-header">Personal Chat</div>
+        <div class="chatbox-messages" id="chatMessages"></div>
+        <div class="chatbox-input">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Chatbox for Group Discussion -->
+    <div id="groupChatbox" class="chatbox-container">
+        <div class="chatbox-header">Group Discussion</div>
+        <div class="chatbox-messages" id="groupChatMessages"></div>
+        <div class="chatbox-input">
+            <input type="text" id="groupChatInput" placeholder="Type your message...">
+            <button onclick="sendGroupMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("sosButton").addEventListener("click", async function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const locationLink = `https://www.google.com/maps?q=${lat},${lng}`;
+                    
+                    const message = `🚨 I need immediate help! My location: ${locationLink}`;
+                    const email = "spkosthwal1414@gmail.com"; // Change this to your emergency email
+                    
+                    try {
+                        const response = await fetch("http://localhost:3000/send-sos-email", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ email, message })
+                        });
+
+                        const data = await response.json();
+                        if (response.ok) {
+                            alert("SOS alert sent successfully!");
+                        } else {
+                            alert("Error sending SOS alert: " + data.error);
+                        }
+                    } catch (error) {
+                        alert("Failed to send SOS email.");
+                        console.error(error);
+                    }
+                }, () => {
+                    alert("Location access denied. Unable to send SOS alert.");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+        function loadChatRequests() {
+            const chatRequests = JSON.parse(localStorage.getItem('chatRequests')) || [];
+            const currentUser = localStorage.getItem('currentUser');
+            const chatContainer = document.getElementById('chatRequests');
+
+            const myRequests = chatRequests.filter(req => req.to === currentUser);
+            if (myRequests.length === 0) {
+                chatContainer.innerHTML = "<p>No chat requests yet.</p>";
+            } else {
+                myRequests.forEach(req => {
+                    const request = document.createElement('div');
+                    request.innerHTML = `<p>Chat request from: ${req.from}</p>`;
+                    chatContainer.appendChild(request);
+                });
+            }
+        }
+
+        loadChatRequests();
+
+        // Toggle chatbox visibility
+        function toggleChatbox() {
+            const chatbox = document.getElementById('chatbox');
+            if (chatbox.style.display === "none" || chatbox.style.display === "") {
+                chatbox.style.display = "block";
+            } else {
+                chatbox.style.display = "none";
+            }
+        }
+
+        // Personal Chatbox functionality
+        function sendMessage() {
+            const message = document.getElementById('chatInput').value;
+            const messagesContainer = document.getElementById('chatMessages');
+
+            if (message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = message;
+                messagesContainer.appendChild(messageDiv);
+
+                // Save message in local storage
+                const storedMessages = JSON.parse(localStorage.getItem('userMessages') || '[]');
+                storedMessages.push({ from: 'Me', message });
+                localStorage.setItem('userMessages', JSON.stringify(storedMessages));
+
+                // Clear input
+                document.getElementById('chatInput').value = '';
+            }
+        }
+
+        // Group Chat functionality
+        function sendGroupMessage() {
+            const message = document.getElementById('groupChatInput').value;
+            const messagesContainer = document.getElementById('groupChatMessages');
+
+            if (message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = message;
+                messagesContainer.appendChild(messageDiv);
+
+                // Save message in local storage
+                const storedGroupMessages = JSON.parse(localStorage.getItem('groupMessages') || '[]');
+                storedGroupMessages.push({ from: 'Me', message });
+                localStorage.setItem('groupMessages', JSON.stringify(storedGroupMessages));
+
+                // Clear input
+                document.getElementById('groupChatInput').value = '';
+            }
+        }
+
+        // Load messages from local storage for personal and group chats
+        function loadSavedMessages() {
+            const userMessages = JSON.parse(localStorage.getItem('userMessages') || '[]');
+            const groupMessages = JSON.parse(localStorage.getItem('groupMessages') || '[]');
+
+            const userMessagesContainer = document.getElementById('chatMessages');
+            const groupMessagesContainer = document.getElementById('groupChatMessages');
+
+            // Load personal messages
+            userMessages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = `${msg.from}: ${msg.message}`;
+                userMessagesContainer.appendChild(messageDiv);
+            });
+
+            // Load group messages
+            groupMessages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = `${msg.from}: ${msg.message}`;
+                groupMessagesContainer.appendChild(messageDiv);
+            });
+        }
+
+        window.onload = () => {
+            loadSavedMessages();
+        };
+
+        // Display the logged-in username
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('userDisplay').textContent = currentUser;
+        }
+
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

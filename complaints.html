@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Complaint Forum</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Submit a Complaint</h2>
+    <form id="complaintForm">
+        <label>Title:</label>
+        <input type="text" id="complaintTitle" required>
+        
+        <label>Message:</label>
+        <textarea id="complaintMessage" required></textarea>
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const complaintForm = document.getElementById('complaintForm');
+        complaintForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const currentUser = localStorage.getItem('currentUser');
+            const title = document.getElementById('complaintTitle').value;
+            const message = document.getElementById('complaintMessage').value;
+
+            const complaint = { user: currentUser, title, message };
+            const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+            complaints.push(complaint);
+            localStorage.setItem('complaints', JSON.stringify(complaints));
+
+            alert('Complaint registered!');
+            window.location.reload();
+        });
+    </script>
+</body>
+
+</html>

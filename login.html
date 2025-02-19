@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Log In</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="form-container">
+        <h2>Log In</h2>
+        <form id="loginForm">
+            <label>Username:</label>
+            <input type="text" id="loginUsername" required>
+
+            <label>Password:</label>
+            <input type="password" id="loginPassword" required>
+
+            <button type="submit">Log In</button>
+        </form>
+        <p id="loginError"></p>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Get the stored username and password from localStorage
+            const storedUsername = localStorage.getItem(`${username}_username`);
+            const storedPassword = localStorage.getItem(`${username}_password`);
+
+            if (storedUsername && storedPassword && storedPassword === password) {
+                // Store the username as the current user in localStorage for session management
+                localStorage.setItem('currentUser', storedUsername);
+                window.location.href = 'profile.html';  // Redirect to profile page after successful login
+            } else {
+                document.getElementById('loginError').textContent = "Invalid username or password!";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
